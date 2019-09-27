@@ -1,0 +1,31 @@
+import trenes.*
+
+describe "testeos" {
+	
+	var formacion1 = new Formacion()
+	var locomotora1 = new Locomotora(peso=1000, arrasteMaximo=12000, velocidadMaxima=80)
+	var locomotora2 = new Locomotora(peso=900, arrasteMaximo=11000, velocidadMaxima=90)
+	var vagonP1 = new VagonPasajeros(largo=10, ancho=2.5)
+	var vagonP2 = new VagonPasajeros(largo=10, ancho=3)
+	var vagonC1 = new VagonCarga(cargaMaxima=2000)
+	var vagonC2 = new VagonCarga(cargaMaxima=3000)
+	
+	fixture{
+		formacion1.locomotoras(#{locomotora1,locomotora2})
+		formacion1.vagonesPasajeros(#{vagonP1, vagonP2})
+		formacion1.vagonesCarga(#{vagonC1, vagonC2})
+	}
+	
+	test "total de pasajeros formacion1"{
+		assert.equals(180,formacion1.cantidadMaximaPasajeros())
+	}
+	
+	test "vagones livianos de formacion1"{
+		assert.equals(1,formacion1.vagonesLivianos())
+	}	
+	
+	test "es eficiente locomotora1?"{
+		assert.that(formacion1.soyEficiente())
+	}
+	
+}
