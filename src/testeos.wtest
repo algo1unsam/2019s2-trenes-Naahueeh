@@ -1,31 +1,88 @@
 import trenes.*
 
 describe "testeos" {
-	
+
 	var formacion1 = new Formacion()
-	var locomotora1 = new Locomotora(peso=1000, arrasteMaximo=12000, velocidadMaxima=80)
-	var locomotora2 = new Locomotora(peso=900, arrasteMaximo=11000, velocidadMaxima=90)
-	var vagonP1 = new VagonPasajeros(largo=10, ancho=2.5)
-	var vagonP2 = new VagonPasajeros(largo=10, ancho=3)
-	var vagonC1 = new VagonCarga(cargaMaxima=2000)
-	var vagonC2 = new VagonCarga(cargaMaxima=3000)
+	var locomotora1 = new Locomotora(peso = 1000, arrasteMaximo = 12000, velocidadMaxima = 80)
+	var locomotora2 = new Locomotora(peso = 900, arrasteMaximo = 11000, velocidadMaxima = 90)
+	var vagonP1 = new VagonPasajeros(largo = 10, ancho = 2.5)
+	var vagonP2 = new VagonPasajeros(largo = 10, ancho = 3)
+	var vagonC1 = new VagonCarga(cargaMaxima = 2000)
+	var vagonC2 = new VagonCarga(cargaMaxima = 3000)
 	
-	fixture{
-		formacion1.locomotoras(#{locomotora1,locomotora2})
-		formacion1.vagonesPasajeros(#{vagonP1, vagonP2})
-		formacion1.vagonesCarga(#{vagonC1, vagonC2})
+	var deposito = new Deposito()
+	
+	var formacion2 = new Formacion()
+	var locomotora1_2 = new Locomotora(peso = 500, arrasteMaximo = 6000, velocidadMaxima = 80)
+	var locomotora2_2 = new Locomotora(peso = 300, arrasteMaximo = 4000, velocidadMaxima = 90)
+	var vagonP1_2 = new VagonPasajeros(largo = 4, ancho = 2.5)
+	var vagonP2_2 = new VagonPasajeros(largo = 6, ancho = 3)
+	var vagonC1_2 = new VagonCarga(cargaMaxima = 5000)
+	var vagonC2_2 = new VagonCarga(cargaMaxima = 3000)
+	
+	var formacion3 = new Formacion()
+	var locomotora1_3 = new Locomotora(peso = 1000, arrasteMaximo = 12000, velocidadMaxima = 80)
+	var locomotora2_3 = new Locomotora(peso = 900, arrasteMaximo = 11000, velocidadMaxima = 90)
+	var vagonP1_3 = new VagonPasajeros(largo = 12, ancho = 2.5)
+	var vagonP2_3 = new VagonPasajeros(largo = 9, ancho = 3)
+	var vagonC1_3 = new VagonCarga(cargaMaxima = 1500)
+	var vagonC2_3 = new VagonCarga(cargaMaxima = 1000)
+	
+	var locomotoraS1 = new Locomotora(peso = 1000, arrasteMaximo = 12000, velocidadMaxima = 80)
+
+	fixture {
+		formacion1.locomotoras(#{ locomotora1, locomotora2 })
+		formacion1.vagonesPasajeros(#{ vagonP1, vagonP2 })
+		formacion1.vagonesCarga(#{ vagonC1, vagonC2 })
+		
+		formacion2.locomotoras(#{ locomotora1_2, locomotora2_2 })
+		formacion2.vagonesPasajeros(#{ vagonP1_2, vagonP2_2 })
+		formacion2.vagonesCarga(#{ vagonC1_2, vagonC2_2 })
+		
+		formacion3.locomotoras(#{ locomotora1_3, locomotora2_3 })
+		formacion3.vagonesPasajeros(#{ vagonP1_3, vagonP2_3 })
+		formacion3.vagonesCarga(#{ vagonC1_3, vagonC2_3 })
+		
+		deposito.formaciones(#{ formacion1, formacion2, formacion3 })
+		deposito.locomotorasSueltas(#{locomotoraS1})
 	}
-	
-	test "total de pasajeros formacion1"{
-		assert.equals(180,formacion1.cantidadMaximaPasajeros())
+
+	test "total de pasajeros formacion1" {
+		assert.equals(180, formacion1.cantidadMaximaPasajeros())
 	}
-	
-	test "vagones livianos de formacion1"{
-		assert.equals(1,formacion1.vagonesLivianos())
-	}	
-	
-	test "es eficiente locomotora1?"{
+
+	test "vagones livianos de formacion1" {
+		assert.equals(1, formacion1.vagonesLivianos())
+	}
+
+	test "es eficiente locomotora1?" {
 		assert.that(formacion1.soyEficiente())
 	}
+
+	test "puede moverse locomotora1?" {
+		assert.that(formacion1.puedoMoverme())
+	}
+
+	test "cuantos kilos de empuje faltan?" {
+		assert.equals(0, formacion1.cuantoEmpujeFalta())
+	}
 	
+	test "conjunto de vagones mas pesados" {
+		deposito.agruparVagonesMasPesados()
+		assert.equals(3, deposito.vagonesMasPesados().size())
+		assert.that(deposito.vagonesMasPesados().contains(vagonP2))
+	}
+	
+	test "deposito necesita conductor experimentado" {
+		assert.that(deposito.necesitoConductorExperimentado())
+	}
+	
+	test "agregar locomotoraS1 a locomotora2 porque no puede moverse" {
+		assert.notThat(formacion2.puedoMoverme())
+		deposito.agregarLocomotora(formacion2)
+		assert.that(formacion2.puedoMoverme())
+		assert.that(formacion2.locomotoras().contains(locomotoraS1))
+	}
+
 }
+

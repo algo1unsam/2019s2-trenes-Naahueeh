@@ -5,11 +5,12 @@ class Deposito{
 	var property locomotorasSueltas=#{}
 	
 	method agruparVagonesMasPesados(){
-		self.vagonesMasPesados().add{locomotora=>locomotora.vagonMasPesado()}
+		self.vagonesMasPesados().clear()
+		self.formaciones().forEach{formacion=>self.vagonesMasPesados().add{formacion.vagonMasPesado()}}
 	}
 	
 	method necesitoConductorExperimentado(){
-		return self.formaciones().any{locomotora=>locomotora.soyCompeja()}
+		return self.formaciones().any{formacion=>formacion.soyCompleja()}
 	}
 	
 	method agregarLocomotora(formacion){
