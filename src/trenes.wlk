@@ -6,7 +6,9 @@ class Deposito{
 	
 	method agruparVagonesMasPesados(){
 		self.vagonesMasPesados().clear()
+		console.println(vagonesMasPesados)
 		self.formaciones().forEach{formacion=>self.vagonesMasPesados().add{formacion.vagonMasPesado()}}
+	
 	}
 	
 	method necesitoConductorExperimentado(){
@@ -72,12 +74,17 @@ class Formacion{
 	
 	method vagonMasPesado(){
 		var pesadoP=self.vagonesPasajeros().max{vagon=>vagon.pesoMaximo()}
+		console.println(pesadoP)
 		var pesadoC=self.vagonesCarga().max{vagon=>vagon.pesoMaximo()}
 		if(pesadoP>pesadoC){
+			
 			return pesadoP
 		}else{
+			
 			return pesadoC
 		}
+		
+		
 	}
 		
 	method cuantasUnidades(){
